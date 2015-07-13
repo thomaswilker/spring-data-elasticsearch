@@ -48,8 +48,8 @@ public abstract class CrudRestController<T extends BaseEntity>  {
 	
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<T> save(T entity) {
-		jpaRepository.save(entity);
-		return ResponseEntity.ok(searchRepository.save(entity));
+		//searchRepository.save(entity)
+		return ResponseEntity.ok(jpaRepository.save(entity));
 	}
 	
 	@RequestMapping(method=RequestMethod.DELETE)

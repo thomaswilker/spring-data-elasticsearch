@@ -6,6 +6,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -77,6 +78,9 @@ public class Book extends BaseEntity {
 		this.category = category;
 	}
 	
-	
+	@PrePersist
+	public void prePersist() {
+		System.out.println("prePersist " + this.name);
+	}
 	
 }
