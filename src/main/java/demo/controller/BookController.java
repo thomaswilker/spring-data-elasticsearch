@@ -55,17 +55,17 @@ public class BookController extends CrudRestController<Book> {
 	@RequestMapping(value="/init", method=RequestMethod.GET)
 	public Iterable<Book> init() {
 		
+		jpaRepository.deleteAll();
+		searchRepository.deleteAll();
+		categoryRepository.deleteAll();
+		categoryJpaRepository.deleteAll();
+		
 		Category c1 = new Category(1l, "Roman");
 		Category c2 = new Category(2l, "Krimi");
-		
 		categoryJpaRepository.save(c1);
 		categoryJpaRepository.save(c2);
 		
-		categoryRepository.save(c1);
-		categoryRepository.save(c2);
-		
 		List<Book> books = LongStream.range(20, 40).boxed().map(i -> new Book(i, "Book " + i, (int) Math.ceil(100 * Math.random()),  (i % 2 == 0) ? c1 : c2)).collect(Collectors.toList());
-		
 		jpaRepository.save(books);
 		searchRepository.save(books);
 		

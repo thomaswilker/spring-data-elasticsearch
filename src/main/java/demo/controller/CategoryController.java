@@ -11,5 +11,5 @@ import demo.model.Category;
 public class CategoryController extends CrudRestController<Category> {
 
 	
-	
+	 
 }

@@ -4,17 +4,16 @@ import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
+import org.apache.log4j.Logger;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import com.fasterxml.jackson.annotation.JsonFilter;
 
 
-
-public abstract class BaseEntity {
+public abstract class BaseEntity<T> {
 	
-	
+	Logger log = Logger.getLogger(this.getClass());
 	
 	@Id
 	@Field(type=FieldType.Long,store=true)
@@ -27,5 +26,11 @@ public abstract class BaseEntity {
 	}
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	
+	public Object convert(T entity) {
+		log.info("convert");
+		return entity;
 	}
 }

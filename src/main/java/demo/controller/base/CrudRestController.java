@@ -42,8 +42,12 @@ public abstract class CrudRestController<T extends BaseEntity>  {
 	protected Logger logger = Logger.getLogger(this.getClass());
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public Page<T> list(Pageable pageable) {
-		return searchRepository.findAll(pageable);
+	public Page<T> list(@RequestParam(value="index", defaultValue="true") Boolean index,
+						Pageable pageable) {
+		if(index)
+			return searchRepository.findAll(pageable);
+		else
+			return jpaRepository.findAll(pageable);
 	}
 	
 	@RequestMapping(method=RequestMethod.POST)

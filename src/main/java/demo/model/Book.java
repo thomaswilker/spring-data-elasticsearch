@@ -1,12 +1,16 @@
 package demo.model;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
+import javax.persistence.PostPersist;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -14,12 +18,13 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.NestedField;
 
+import demo.ApplicationContextProvider;
 import demo.annotation.Update;
 
 
 @Entity(name="book")
 @Document(indexName = "books", type = "book" , shards = 1, replicas = 1, indexStoreType = "fs", refreshInterval = "1")
-public class Book extends BaseEntity {
+public class Book extends BaseEntity<Book> {
 
 	@Field(type=FieldType.String,store=true)
 	public String name = null;
@@ -68,7 +73,7 @@ public class Book extends BaseEntity {
 		this.pages = pages;
 	}
 	
-	@ManyToOne
+	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name = "categoryId", nullable = true)
 	public Category getCategory() {
 		return category;
@@ -78,9 +83,18 @@ public class Book extends BaseEntity {
 		this.category = category;
 	}
 	
-	@PrePersist
-	public void prePersist() {
-		System.out.println("prePersist " + this.name);
+	@PostPersist
+	public void postPersist() {
+		
+		EntityManager em = ApplicationContextProvider.getApplicationContext().getBean(EntityManager.class);
+		log.info("manager " + em);
+		
 	}
 	
+	@Override
+	public Object convert(Book entity) {
+		
+		log.info(entity.getCategory().getBooks().size());
+		return entity;
+	}
 }
