@@ -1,7 +1,6 @@
 package demo.model;
 
-import java.util.List;
-
+import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,14 +10,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PostPersist;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.NestedField;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.IndexQuery;
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
-import demo.ApplicationContextProvider;
+import demo.SpringTestApplication;
 import demo.annotation.Update;
 
 
@@ -86,8 +90,12 @@ public class Book extends BaseEntity<Book> {
 	@PostPersist
 	public void postPersist() {
 		
-		EntityManager em = ApplicationContextProvider.getApplicationContext().getBean(EntityManager.class);
-		log.info("manager " + em);
+		EntityManager entityManager = SpringTestApplication.context.getBean(EntityManager.class);	
+		ElasticsearchTemplate template = SpringTestApplication.context.getBean(ElasticsearchTemplate.class);	
+		ElasticsearchRepository<Book, Long> respository;	
+
+		Book b = entityManager.find(this.getClass(), this.getId());
+		
 		
 	}
 	
