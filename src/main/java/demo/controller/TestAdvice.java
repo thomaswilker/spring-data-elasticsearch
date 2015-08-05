@@ -31,6 +31,13 @@ public class TestAdvice {
 	@Autowired
 	ElasticsearchTemplate template;
 	
+	@Around(value="execution(* demo.repository.jpa.*.save(..))")
+	public Object repository(ProceedingJoinPoint pjp) throws Throwable {
+		logger.info(pjp);
+		Object object = pjp.proceed();
+		return object;
+	}
+	
 	@Around(value="execution(* demo.controller.base.CrudRestController.update(..))")
 	public Object controller(ProceedingJoinPoint pjp) throws Throwable {
 		
