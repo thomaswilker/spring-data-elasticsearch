@@ -1,6 +1,5 @@
 package demo.model;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,17 +9,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PostPersist;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.annotations.NestedField;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.query.IndexQuery;
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 import demo.SpringTestApplication;
 import demo.annotation.Update;
@@ -47,6 +42,7 @@ public class Book extends BaseEntity<Book> {
 		this.name = name;
 		this.pages = pages;
 		this.category = cat;
+		
 	}
 	
 	@Override
@@ -92,17 +88,9 @@ public class Book extends BaseEntity<Book> {
 		
 		EntityManager entityManager = SpringTestApplication.context.getBean(EntityManager.class);	
 		ElasticsearchTemplate template = SpringTestApplication.context.getBean(ElasticsearchTemplate.class);	
-		ElasticsearchRepository<Book, Long> respository;	
-
 		Book b = entityManager.find(this.getClass(), this.getId());
-		
-		
+		b.index(b, id, template);
 	}
 	
-	@Override
-	public Object convert(Book entity) {
-		
-		log.info(entity.getCategory().getBooks().size());
-		return entity;
-	}
+	
 }

@@ -1,4 +1,4 @@
-package demo.controller.base;
+package demo.controller;
 
 import java.util.Set;
 

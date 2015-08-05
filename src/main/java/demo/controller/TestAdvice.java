@@ -31,7 +31,7 @@ public class TestAdvice {
 	@Autowired
 	ElasticsearchTemplate template;
 	
-	@Around(value="execution(* demo.controller.base.CrudRestController.update(..))")
+	@Around(value="execution(* demo.controller.CrudRestController.update(..))")
 	public Object controller(ProceedingJoinPoint pjp) throws Throwable {
 		
 		BaseEntity e = (BaseEntity) pjp.getArgs()[1];

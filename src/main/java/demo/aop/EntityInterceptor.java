@@ -27,16 +27,12 @@ public class EntityInterceptor extends EmptyInterceptor {
 	public boolean onSave(Object entity, Serializable id, Object[] state,
 			String[] propertyNames, Type[] types) {
 
-		
-		
 		BaseEntity baseEntity = (BaseEntity) entity;
-		
-		
 		Document d = entity.getClass().getAnnotation(Document.class);
 		IndexQuery query = new IndexQuery();
 		query.setIndexName(d.indexName());
 		query.setId(baseEntity.getId().toString());
-		query.setObject(baseEntity.convert(entity));
+		query.setObject(entity);
 		query.setType(d.type());
 		template.index(query);
 		return false;

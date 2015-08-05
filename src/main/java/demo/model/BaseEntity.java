@@ -1,13 +1,17 @@
 package demo.model;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 
 import org.apache.log4j.Logger;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.IndexQuery;
 
 
 
@@ -28,9 +32,20 @@ public abstract class BaseEntity<T> {
 		this.id = id;
 	}
 	
-	
-	public Object convert(T entity) {
-		log.info("convert");
-		return entity;
+	protected void index(Object entity, Long id, ElasticsearchTemplate template) {
+		
+		Document d = entity.getClass().getAnnotation(Document.class);
+		IndexQuery query = new IndexQuery();
+		query.setIndexName(d.indexName());
+		query.setId(id.toString());
+		query.setObject(entity);
+		query.setType(d.type());
+		template.index(query);
 	}
+	
+	@PostConstruct
+	public void postConstruct() {
+		System.out.println("postConstruct");
+	}
+	
 }
