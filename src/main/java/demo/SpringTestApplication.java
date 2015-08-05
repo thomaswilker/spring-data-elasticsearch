@@ -5,12 +5,14 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 import org.springframework.context.annotation.aspectj.EnableSpringConfigured;
 
 @Configuration
 @SpringBootApplication
 @EnableAutoConfiguration
 @EnableSpringConfigured
+@ImportResource({"classpath*:applicationContext.xml"})
 public class SpringTestApplication extends SpringApplication {
 
 	public static ApplicationContext context;

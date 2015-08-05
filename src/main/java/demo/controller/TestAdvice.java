@@ -2,8 +2,10 @@ package demo.controller;
 
 import org.apache.log4j.Logger;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
+import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.stereotype.Component;
@@ -17,16 +19,12 @@ public class TestAdvice {
 	@Autowired
 	ElasticsearchTemplate template;
 	
-	@Around(value="execution(* demo.repository.jpa.BookJpaRepository.save(..))")
-	public Object repository(ProceedingJoinPoint pjp) throws Throwable {
-		
-		for(Object o : pjp.getArgs()) {
-			System.out.println(o);
-		}
-		
-		Object object = pjp.proceed();
-		return object;
+	
+	@AfterReturning(pointcut="execution(* demo.repository.jpa.BookJpaRepository.save(..))", returning="entity")
+	public void repositorySave(Object entity)  {
+		logger.info(entity);
 	}
+	
 	
 	@Around(value="execution(* demo.controller.CrudRestController.update(..))")
 	public Object controller(ProceedingJoinPoint pjp) throws Throwable {
