@@ -66,7 +66,6 @@ public class BookController extends CrudRestController<Book> {
 		
 		List<Book> books = LongStream.range(20, 40).boxed().map(i -> new Book(i, "Book " + i, (int) Math.ceil(100 * Math.random()),  (i % 2 == 0) ? c1 : c2)).collect(Collectors.toList());
 		jpaRepository.save(books);
-		searchRepository.save(books);
 		
 		return searchRepository.findAll();
 	}
