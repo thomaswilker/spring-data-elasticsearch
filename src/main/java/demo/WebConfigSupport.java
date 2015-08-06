@@ -15,7 +15,7 @@ import org.springframework.format.support.FormattingConversionService;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
-import demo.controller.TestAdvice;
+import demo.aop.TestAdvice;
 
 @Configuration
 @EnableElasticsearchRepositories(basePackages="demo.repository.search")

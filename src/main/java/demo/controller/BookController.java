@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import demo.controller.base.CrudRestController;
 import demo.model.Book;
 import demo.model.Category;
-import demo.repository.jpa.CategoryJpaRespository;
+import demo.repository.jpa.CategoryJpaRepository;
 import demo.repository.search.CategoryRepository;
 
 @RestController
@@ -32,7 +32,7 @@ public class BookController extends CrudRestController<Book> {
 	CategoryRepository categoryRepository;
 	
 	@Autowired
-	CategoryJpaRespository categoryJpaRepository;
+	CategoryJpaRepository categoryJpaRepository;
 	
 	@RequestMapping(value="/filter", method=RequestMethod.GET)
 	public Iterable<Book> filter(@RequestParam Map<String,String> allRequestParams, 
@@ -56,18 +56,14 @@ public class BookController extends CrudRestController<Book> {
 	public Iterable<Book> init() {
 		
 		jpaRepository.deleteAll();
-		searchRepository.deleteAll();
-		categoryRepository.deleteAll();
-		categoryJpaRepository.deleteAll();
 		
 		Category c1 = new Category(1l, "Roman");
 		Category c2 = new Category(2l, "Krimi");
+		
 		categoryJpaRepository.save(c1);
 		categoryJpaRepository.save(c2);
-		
-		List<Book> books = LongStream.range(20, 40).boxed().map(i -> new Book(i, "Book " + i, (int) Math.ceil(100 * Math.random()),  (i % 2 == 0) ? c1 : c2)).collect(Collectors.toList());
+		List<Book> books = LongStream.range(1, 40).boxed().map(i -> new Book(i, "Book " + i, (int) Math.ceil(100 * Math.random()),  (i % 2 == 0) ? c1 : c2)).collect(Collectors.toList());
 		jpaRepository.save(books);
-		searchRepository.save(books);
 		
 		return searchRepository.findAll();
 	}

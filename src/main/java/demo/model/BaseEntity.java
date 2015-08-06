@@ -11,7 +11,7 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 
 
 
-public abstract class BaseEntity<T> {
+public abstract class BaseEntity {
 	
 	Logger log = Logger.getLogger(this.getClass());
 	
@@ -28,9 +28,4 @@ public abstract class BaseEntity<T> {
 		this.id = id;
 	}
 	
-	
-	public Object convert(T entity) {
-		log.info("convert");
-		return entity;
-	}
 }

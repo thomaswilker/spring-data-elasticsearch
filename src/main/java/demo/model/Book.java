@@ -28,7 +28,7 @@ import demo.annotation.Update;
 
 @Entity(name="book")
 @Document(indexName = "books", type = "book" , shards = 1, replicas = 1, indexStoreType = "fs", refreshInterval = "1")
-public class Book extends BaseEntity<Book> {
+public class Book extends BaseEntity {
 
 	@Field(type=FieldType.String,store=true)
 	public String name = null;
@@ -99,10 +99,4 @@ public class Book extends BaseEntity<Book> {
 		
 	}
 	
-	@Override
-	public Object convert(Book entity) {
-		
-		log.info(entity.getCategory().getBooks().size());
-		return entity;
-	}
 }
